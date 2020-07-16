@@ -96,6 +96,13 @@ public class UcUserInfoController {
         System.out.println(id);
     }
 
+
+    @RequestMapping ("/test")
+    public JsonResult test() {
+        System.out.println("远程调用uc测试~~");
+        return JsonResult.success("远程调用uc测试~~");
+    }
+
 //    @GetMapping
 //    @JsonView(User.UserSimpleView.class)
 //    @ApiOperation(value = "用户查询服务")

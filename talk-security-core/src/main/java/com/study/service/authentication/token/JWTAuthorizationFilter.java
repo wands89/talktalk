@@ -1,7 +1,9 @@
 package com.study.service.authentication.token;
 
 import com.study.service.authentication.JwtUserDetails;
+import com.study.service.dto.basic.JsonResult;
 import com.study.service.dto.uc.UserRepository;
+import com.study.service.feign.UcFeign;
 import com.study.service.properties.SecurityConstants;
 import com.study.service.properties.SecurityProperties;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,6 +46,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
     @Autowired
     private SecurityProperties securityProperties;
 
+    @Autowired
+    private UcFeign ucFeign;
     /**
      * 存放所有需要校验验证码的url
      */
@@ -84,6 +88,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
                     log.info("checking authentication {}", username);
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                         //从已有的user缓存中取了出user信息
+                        JsonResult jsonResult=ucFeign.getTest();
+                        log.error("ccc!!!!!!: "+jsonResult.getResult().toString());
                         JwtUserDetails user = userRepository.findByUsername(username);
 
                         //检查token是否有效

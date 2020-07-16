@@ -86,7 +86,6 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .csrf().disable()
-
                 .apply(smsCodeAuthenticationConfig);//将core中的配置倒入
 
     }
