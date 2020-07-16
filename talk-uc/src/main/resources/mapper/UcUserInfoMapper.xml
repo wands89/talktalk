@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.service.mapper.UcUserInfoMapper">
+
+    <insert id="addUser" parameterType="com.study.service.dto.uc.ReqUserInfoDto">
+        insert into uc_user_info  (user_name,nick_name,password)
+        values(#{user.userName},#{user.nickName},#{user.password});
+    </insert>
+    <select id="findUser" parameterType="com.study.service.dto.uc.ReqUserInfoDto"
+            resultType="com.study.service.entity.UcUserInfo">
+        select * from uc_user_info
+        <where>
+            <if test="user.userName!=null and user.userName !='' ">
+                user_name=#{user.userName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

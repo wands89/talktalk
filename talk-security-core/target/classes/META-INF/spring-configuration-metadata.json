@@ -1,0 +1,22 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.study.service.properties.SecurityProperties",
+      "name": "imooc.security",
+      "type": "com.study.service.properties.SecurityProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.study.service.properties.SecurityProperties",
+      "name": "imooc.security.browser",
+      "type": "com.study.service.properties.BrowserProperties"
+    },
+    {
+      "sourceType": "com.study.service.properties.SecurityProperties",
+      "name": "imooc.security.code",
+      "type": "com.study.service.properties.ValidateCodeProperties"
+    }
+  ]
+}
