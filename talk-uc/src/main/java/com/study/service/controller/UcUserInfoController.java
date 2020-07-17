@@ -1,8 +1,12 @@
 package com.study.service.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.study.service.Utils.JsonUtils;
 import com.study.service.dto.basic.JsonResult;
+import com.study.service.dto.enums.HttpStatusMicro;
 import com.study.service.dto.uc.ReqUserInfoDto;
+import com.study.service.entity.UcUserInfo;
+import com.study.service.mapper.UcUserInfoMapper;
 import com.study.service.service.UcUserInfoService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +19,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -26,12 +32,14 @@ public class UcUserInfoController {
 
     @Autowired
     UcUserInfoService userInfoService;
+    @Resource
+    UcUserInfoMapper userInfoMapper;
 
 
     @PostMapping("/register")
     @ApiOperation("注册用户")
     @ApiImplicitParams(
-            {@ApiImplicitParam(name = "dto", value = "注册用户", required = true, paramType = "body", dataType = "ReqUserInfoDto") })
+            {@ApiImplicitParam(name = "dto", value = "注册用户", required = true, paramType = "body", dataType = "ReqUserInfoDto")})
     public JsonResult register(@RequestBody ReqUserInfoDto dto) {
         String userName = dto.getUserName();
         String nickName = dto.getNickName();
@@ -66,6 +74,30 @@ public class UcUserInfoController {
         return user;
     }
 
+    @PostMapping("/getUserInfo")
+    public JsonResult getUserInfo(@RequestBody ReqUserInfoDto user) {
+        try {
+            List<ReqUserInfoDto> ucUserInfoList = userInfoMapper.findUser(user);
+            return JsonResult.success(HttpStatus.OK.value(), ucUserInfoList);
+        } catch (Exception e) {
+            log.error("查找用户信息错误：" + e.getLocalizedMessage(), e);
+            return JsonResult.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getLocalizedMessage());
+        }
+    }
+
+    @PostMapping("/getUserInfoInner")
+    public JsonResult getUserInfoInner(@RequestParam("userStr") String userStr) {
+        ReqUserInfoDto user= JsonUtils.fromJson(userStr,ReqUserInfoDto.class);
+        try{
+            List<ReqUserInfoDto> ucUserInfoList = userInfoMapper.findUser(user);
+            return JsonResult.success(HttpStatus.OK.value(), ucUserInfoList);
+        } catch (Exception e) {
+            log.error("查找用户信息错误：" + e.getLocalizedMessage(), e);
+            return JsonResult.fail(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getLocalizedMessage());
+        }
+    }
+
+
     @PostMapping
     @ApiOperation(value = "创建用户")
     public ReqUserInfoDto create(@Valid @RequestBody ReqUserInfoDto user) {
@@ -97,7 +129,7 @@ public class UcUserInfoController {
     }
 
 
-    @RequestMapping ("/test")
+    @RequestMapping("/test")
     public JsonResult test() {
         System.out.println("远程调用uc测试~~");
         return JsonResult.success("远程调用uc测试~~");

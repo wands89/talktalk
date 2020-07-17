@@ -8,10 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="talk-security-core" />
-        <module name="talk-browser" />
-        <module name="talk-uc" />
         <module name="talk-eureka-server" />
+        <module name="talk-uc" />
         <module name="talk-common" />
+        <module name="talk-browser" />
       </profile>
     </annotationProcessing>
   </component>

@@ -9,8 +9,6 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -44,16 +42,9 @@ public class BrowserSecurityController {
             log.error("引发跳转的URL：" + targetUrl);
             if (StringUtils.endsWithIgnoreCase(targetUrl, ".html")) {
                 redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
-            }else{
-               Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-               if(authentication!=null)
-               {
-                   redirectStrategy.sendRedirect(request, response,targetUrl);
-               }
             }
         }
         return new SimpleResponse("需要身份认证，请返回登陆页面！");
     }
-
 
 }

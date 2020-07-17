@@ -1,7 +1,9 @@
 package com.study.service.authentication.token;
 
+import com.study.service.Utils.JsonUtils;
 import com.study.service.authentication.JwtUserDetails;
 import com.study.service.dto.basic.JsonResult;
+import com.study.service.dto.uc.ReqUserInfoDto;
 import com.study.service.dto.uc.UserRepository;
 import com.study.service.feign.UcFeign;
 import com.study.service.properties.SecurityConstants;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,9 +39,11 @@ import java.util.Set;
 @Component
 @Slf4j
 public class JWTAuthorizationFilter extends OncePerRequestFilter implements InitializingBean {
-
     @Resource
-    private UserRepository userRepository;
+    private UserRepository repository;
+
+    @Autowired
+    private UcFeign ucFeign;
 
     /**
      * 系统配置信息
@@ -46,8 +51,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
     @Autowired
     private SecurityProperties securityProperties;
 
-    @Autowired
-    private UcFeign ucFeign;
     /**
      * 存放所有需要校验验证码的url
      */
@@ -74,7 +77,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         try {
-            if(needFilter(request)){
+            if (needFilter(request)) {
                 //先从url中取token
                 String authToken = request.getParameter("token");
                 String authHeader = request.getHeader(JwtUtils.TOKEN_HEADER);
@@ -88,10 +91,18 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
                     log.info("checking authentication {}", username);
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                         //从已有的user缓存中取了出user信息
-                        JsonResult jsonResult=ucFeign.getTest();
-                        log.error("ccc!!!!!!: "+jsonResult.getResult().toString());
-                        JwtUserDetails user = userRepository.findByUsername(username);
-
+                        ReqUserInfoDto reqUserInfoDto=ReqUserInfoDto.builder().userName(username).build();
+                        JsonResult jsonResult = ucFeign.getUserInfoInner(JsonUtils.toJson(reqUserInfoDto));
+                        if (!jsonResult.isFlag()) {
+                            throw new RuntimeException("feign调用失败");
+                        }
+                        JwtUserDetails user = null;
+                        String resultStr = JsonUtils.toJson(jsonResult.getResult());
+                        List<ReqUserInfoDto> userInfoDtoList = (List<ReqUserInfoDto>) JsonUtils.transformCollectionsFromJson(resultStr, ReqUserInfoDto.class, List.class);
+                        if (CollectionUtils.isEmpty(userInfoDtoList) && userInfoDtoList.size() == 1) {
+                            ReqUserInfoDto dto = userInfoDtoList.get(0);
+                            user = new JwtUserDetails(dto);
+                        }
                         //检查token是否有效
                         if (JwtUtils.validateToken(authToken, user)) {
                             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -103,7 +114,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
                             SecurityContextHolder.getContext().setAuthentication(authentication);
                         }
                     }
-                }else{
+                } else {
                     //如果请求中没有token则认为没有权限
                     SecurityContextHolder.getContext().setAuthentication(null);
                 }
@@ -120,18 +131,18 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
     protected void addUrlToSet(String urlString) {
         if (StringUtils.isNotBlank(urlString)) {
             String[] urls = StringUtils.splitByWholeSeparatorPreserveAllTokens(urlString, ",");
-           urlMap.addAll(Arrays.asList(urls));
+            urlMap.addAll(Arrays.asList(urls));
         }
     }
 
     //判断当前的url是否需要token认证，只有登陆页面不需要
-    private boolean needFilter(HttpServletRequest request){
-        boolean result=true;
+    private boolean needFilter(HttpServletRequest request) {
+        boolean result = true;
         if (!CollectionUtils.isEmpty(urlMap)) {
             for (String url : urlMap) {
                 if (pathMatcher.match(url, request.getRequestURI())) {
                     //一旦匹配上就不需要验证
-                    result =false;
+                    result = false;
                     break;
                 }
             }

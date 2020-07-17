@@ -10,5 +10,5 @@ import java.util.List;
 public interface UcUserInfoMapper {
     Integer addUser(@Param("user") ReqUserInfoDto dto);
 
-    List<UcUserInfo> findUser(@Param("user") ReqUserInfoDto dto);
+    List<ReqUserInfoDto> findUser(@Param("user") ReqUserInfoDto dto);
 }

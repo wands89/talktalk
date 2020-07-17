@@ -24,7 +24,7 @@ PasswordEncoder passwordEncoder;
     @Override
     public boolean register(ReqUserInfoDto dto) throws Exception {
         //查重
-        List<UcUserInfo> users = userInfoMapper.findUser(dto);
+        List<ReqUserInfoDto> users = userInfoMapper.findUser(dto);
         if (!CollectionUtils.isEmpty(users)) {
             throw new RuntimeException("当前用户名已存在，请重命名！");
         }
