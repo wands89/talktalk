@@ -13,6 +13,7 @@
         <module>talk-uc</module>
         <module>talk-browser</module>
         <module>talk-eureka-server</module>
+        <module>talk-talk-server</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="talk-talk-server" />
         <module name="talk-security-core" />
-        <module name="talk-eureka-server" />
-        <module name="talk-uc" />
         <module name="talk-common" />
+        <module name="talk-uc" />
         <module name="talk-browser" />
+        <module name="talk-eureka-server" />
       </profile>
     </annotationProcessing>
   </component>

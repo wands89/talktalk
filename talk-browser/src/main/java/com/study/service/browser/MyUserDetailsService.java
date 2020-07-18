@@ -42,16 +42,10 @@ public class MyUserDetailsService implements UserDetailsService {
             pass=userInfoDto.getPassword();
             role=userInfoDto.getRole();
         }
-   //     pass=passwordEncoder.encode("123456");
-
-        log.error("秘密是：" + pass);
-//        return new User(name, pass,
-//                true, true, true, true,
-//                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
         ReqUserInfoDto dto = new ReqUserInfoDto();
         dto.setUserName(name);
         dto.setPassword(pass);
-        dto.setRole("admin");
+        dto.setRole(role);
         return new JwtUserDetails(dto);
     }
 }

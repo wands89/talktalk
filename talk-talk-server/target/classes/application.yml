@@ -1,0 +1,46 @@
+server:
+  port: 8884
+eureka:
+  client:
+    service-url:
+      #注册中心控制台地址
+      #      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://localhost:8886/eureka/
+spring:
+  application:
+    name: talk-center #应用程序名称
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.0.104:3306/uc?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    #初始化的数据库
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      filters: stat
+      max-active: 20
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      min-evictable-idle-time-millis: 30000
+      time-between-eviction-runs-millis: 60000
+      test-while-idle: true
+      test-on-borrow: true
+      test-on-return: true
+      max-pool-prepared-statement-per-connection-size: 20
+
+    #配置rabbitMq 服务器
+  rabbitmq:
+    host: 192.168.0.104
+    port: 5672
+    username: root
+    password: 123456
+  # 初始化大小，最小，最大
+
+#  spring.datasource.druid.min-evictable-idle-time-millis=300000
+#  spring.datasource.druid.validation-query=select 1
+#  spring.datasource.druid.test-while-idle=true
+#  spring.datasource.druid.test-on-borrow=true
+#  spring.datasource.druid.test-on-return=true
+#  spring.datasource.druid.pool-prepared-statements=true
+#  spring.datasource.druid.max-open-prepared-statements=20

@@ -3,19 +3,19 @@
   "groups": [
     {
       "sourceType": "com.study.service.properties.SecurityProperties",
-      "name": "imooc.security",
+      "name": "talk.security",
       "type": "com.study.service.properties.SecurityProperties"
     }
   ],
   "properties": [
     {
       "sourceType": "com.study.service.properties.SecurityProperties",
-      "name": "imooc.security.browser",
+      "name": "talk.security.browser",
       "type": "com.study.service.properties.BrowserProperties"
     },
     {
       "sourceType": "com.study.service.properties.SecurityProperties",
-      "name": "imooc.security.code",
+      "name": "talk.security.code",
       "type": "com.study.service.properties.ValidateCodeProperties"
     }
   ]
