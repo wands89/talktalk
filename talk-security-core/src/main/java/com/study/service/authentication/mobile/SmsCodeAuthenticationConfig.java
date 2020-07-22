@@ -19,8 +19,7 @@ public class SmsCodeAuthenticationConfig extends
     @Autowired
     AuthenticationFailureHandler failureHandler;
 
-    @Autowired
-    UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {

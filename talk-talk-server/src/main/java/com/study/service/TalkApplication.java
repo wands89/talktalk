@@ -7,7 +7,6 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@FeignClient
 public class TalkApplication {
     public static void main(String[] args) {
         SpringApplication.run(TalkApplication.class, args);

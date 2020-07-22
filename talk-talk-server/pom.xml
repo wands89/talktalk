@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.study.service</groupId>
-            <artifactId>talk-security-core</artifactId>
+            <artifactId>talk-browser</artifactId>
             <version>${talk.server.version}</version>
         </dependency>
         <!--引入maven-->

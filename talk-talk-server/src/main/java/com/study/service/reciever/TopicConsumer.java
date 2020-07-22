@@ -9,11 +9,10 @@ import java.util.Map;
 
 
 @Component
-@RabbitListener(queues = "topic.man")
 public class TopicConsumer {
-
-    @RabbitHandler
+    @RabbitListener(queues = "topic.product")
+    //@RabbitHandler
     public void process(ReqTalkMessageInfoDto testMessage) {
-        System.out.println("TopicManReceiver消费者收到消息  : " + testMessage.getMessageData());
+        System.err.println("TopicManReceiver消费者收到消息  : " + testMessage.getMessageData());
     }
 }

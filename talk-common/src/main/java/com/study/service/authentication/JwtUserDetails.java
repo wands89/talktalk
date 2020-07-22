@@ -23,6 +23,7 @@ import java.util.Collections;
         public JwtUserDetails(ReqUserInfoDto user) {
             username = user.getUserName();
             password = user.getPassword();
+            user.setRole("admin");
             authorities = Collections.singleton(new SimpleGrantedAuthority(user.getRole()));
         }
 

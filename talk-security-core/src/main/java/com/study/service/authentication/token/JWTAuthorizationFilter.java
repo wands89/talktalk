@@ -99,7 +99,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter implements Init
                         JwtUserDetails user = null;
                         String resultStr = JsonUtils.toJson(jsonResult.getResult());
                         List<ReqUserInfoDto> userInfoDtoList = (List<ReqUserInfoDto>) JsonUtils.transformCollectionsFromJson(resultStr, ReqUserInfoDto.class, List.class);
-                        if (CollectionUtils.isEmpty(userInfoDtoList) && userInfoDtoList.size() == 1) {
+                        if (!CollectionUtils.isEmpty(userInfoDtoList) && userInfoDtoList.size() == 1) {
                             ReqUserInfoDto dto = userInfoDtoList.get(0);
                             user = new JwtUserDetails(dto);
                         }

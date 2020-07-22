@@ -1,5 +1,5 @@
 server:
-  port: 8884
+  port: 8066
 eureka:
   client:
     service-url:
@@ -35,6 +35,7 @@ spring:
     port: 5672
     username: root
     password: 123456
+    virtual-host: /myself
   # 初始化大小，最小，最大
 
 #  spring.datasource.druid.min-evictable-idle-time-millis=300000
